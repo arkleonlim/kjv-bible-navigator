@@ -226,3 +226,46 @@ ul a:hover {
   font-family: inherit;
   cursor: pointer;
 }
+
+/* -----------------------------
+   LOADING OVERLAY
+------------------------------*/
+
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--bg);
+
+  z-index: 2000;
+}
+
+/* rotating hourglass */
+
+.spinner {
+  font-size: 40px;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* hidden state */
+
+.hidden {
+  display: none !important;
+}

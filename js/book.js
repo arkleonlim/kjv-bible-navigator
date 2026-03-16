@@ -40,6 +40,20 @@ themeToggle.addEventListener("click", toggleTheme);
 
 setTheme(savedTheme);
 
+/* -----------------------------
+   LOADER
+------------------------------*/
+
+const loader = document.getElementById("loader");
+
+function showLoader() {
+  loader.classList.remove("hidden");
+}
+
+function hideLoader() {
+  loader.classList.add("hidden");
+}
+
 function normalizeBook(book) {
   return book.toLowerCase().replace(/\s+/g, "");
 }
@@ -49,6 +63,8 @@ let suppressVerseClick = false;
 let currentUtterance = null;
 
 async function loadBook(bookName) {
+  showLoader();
+
   const res = await fetch(`data/${bookName}.json`);
   const data = await res.json();
 
@@ -152,6 +168,11 @@ async function loadBook(bookName) {
 
   setupVerseClick(container);
   highlightFromHash();
+
+  setupVerseClick(container);
+  highlightFromHash();
+
+  hideLoader();
 }
 
 /* -----------------------------
