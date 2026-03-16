@@ -3,6 +3,8 @@ function normalizeBook(book) {
 }
 
 let longPressTimer = null;
+let suppressVerseClick = false;
+let currentUtterance = null;
 
 async function loadBook(bookName) {
   const res = await fetch(`data/${bookName}.json`);
@@ -70,6 +72,11 @@ async function loadBook(bookName) {
       const id = `${bookKey}-${chapter.chapter}-${v.verse}`;
       verse.id = id;
 
+      verse.dataset.book = data.book;
+      verse.dataset.chapter = chapter.chapter;
+      verse.dataset.verse = v.verse;
+      verse.dataset.text = v.text;
+
       verse.innerHTML = `<a href="#${id}" class="verse">${v.verse}</a> ${v.text}`;
 
       container.appendChild(verse);
@@ -78,8 +85,11 @@ async function loadBook(bookName) {
          LONG PRESS COPY FEATURE
       ------------------------------*/
 
-      const startPress = (e) => {
+      const startPress = () => {
+        suppressVerseClick = false;
+
         longPressTimer = setTimeout(() => {
+          suppressVerseClick = true;
           copyVerse(v.text, data.book, chapter.chapter, v.verse, verse);
         }, 1000);
       };
@@ -89,7 +99,7 @@ async function loadBook(bookName) {
       };
 
       verse.addEventListener("mousedown", startPress);
-      verse.addEventListener("touchstart", startPress);
+      verse.addEventListener("touchstart", startPress, { passive: true });
 
       verse.addEventListener("mouseup", cancelPress);
       verse.addEventListener("mouseleave", cancelPress);
@@ -100,6 +110,29 @@ async function loadBook(bookName) {
 
   setupVerseClick(container);
   highlightFromHash();
+}
+
+/* -----------------------------
+   SPEAK VERSE USING BROWSER TTS
+------------------------------*/
+
+function speakVerse(text, book, chapter, verse) {
+  if (!("speechSynthesis" in window)) {
+    console.warn("This browser does not support speech synthesis.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const speechText = `${book}, chapter ${chapter}, verse ${verse}. ${text}`;
+  currentUtterance = new SpeechSynthesisUtterance(speechText);
+
+  currentUtterance.lang = "en-US";
+  currentUtterance.rate = 1;
+  currentUtterance.pitch = 1;
+  currentUtterance.volume = 1;
+
+  window.speechSynthesis.speak(currentUtterance);
 }
 
 /* -----------------------------
@@ -163,11 +196,16 @@ function highlightFromHash() {
 }
 
 /* -----------------------------
-   CLICK VERSE TO HIGHLIGHT
+   CLICK VERSE TO HIGHLIGHT + READ
 ------------------------------*/
 
 function setupVerseClick(container) {
   container.addEventListener("click", (e) => {
+    if (suppressVerseClick) {
+      suppressVerseClick = false;
+      return;
+    }
+
     const link = e.target.closest(".verse");
     const verseElement = e.target.closest("#bible p");
 
@@ -192,6 +230,13 @@ function setupVerseClick(container) {
     verse.classList.add("highlight-verse");
 
     history.replaceState(null, "", `#${verseId}`);
+
+    const text = verse.dataset.text || "";
+    const book = verse.dataset.book || "";
+    const chapter = verse.dataset.chapter || "";
+    const verseNumber = verse.dataset.verse || "";
+
+    speakVerse(text, book, chapter, verseNumber);
   });
 }
 
