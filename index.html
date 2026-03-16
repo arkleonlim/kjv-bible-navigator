@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>KJV Bible</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <a id="top"></a>
+
+    <h1>KJV Bible Navigator</h1>
+
+    <h2>Quick Select:</h2>
+
+    <select id="quickBook"></select>
+    <select id="quickChapter"></select>
+    <select id="quickVerse"></select>
+
+    <button onclick="quickGo()">Go</button>
+
+    <h2>Select book/section:</h2>
+
+    <h3>Old Testament</h3>
+
+    <select id="otSelect"></select>
+    <button onclick="goBook('otSelect')">Go</button>
+
+    <ul>
+      <li><a href="#Pentateuch">Pentateuch</a></li>
+      <li><a href="#History">History</a></li>
+      <li><a href="#Wisdom">Wisdom</a></li>
+      <li><a href="#MajorProphets">Major Prophets</a></li>
+      <li><a href="#MinorProphets">Minor Prophets</a></li>
+    </ul>
+
+    <h3>New Testament</h3>
+
+    <select id="ntSelect"></select>
+    <button onclick="goBook('ntSelect')">Go</button>
+
+    <ul>
+      <li><a href="#Gospels">Gospels</a></li>
+      <li><a href="#Acts">Acts</a></li>
+      <li><a href="#Pauline">Pauline Epistles</a></li>
+      <li><a href="#General">General Epistles</a></li>
+      <li><a href="#Revelation">Revelation</a></li>
+    </ul>
+
+    <hr />
+
+    <h2>Select chapter:</h2>
+
+    <div id="books"></div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
