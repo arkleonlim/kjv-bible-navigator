@@ -217,7 +217,19 @@ function buildSection(sectionName, books) {
 
   const title = document.createElement("h2");
   title.className = "section-title";
-  title.innerHTML = `${formatSectionName(sectionName)} <a href="#top">[^]</a>`;
+
+  title.innerHTML = `${formatSectionName(sectionName)} `;
+
+  const topBtn = document.createElement("button");
+  topBtn.textContent = "🔼";
+  topBtn.className = "top-button";
+
+  topBtn.addEventListener("click", () => {
+    document.getElementById("top").scrollIntoView({ behavior: "smooth" });
+  });
+
+  title.appendChild(topBtn);
+
   section.appendChild(title);
 
   for (const book of books) {
@@ -225,7 +237,9 @@ function buildSection(sectionName, books) {
 
     const bookTitle = document.createElement("h3");
     bookTitle.id = book;
-    bookTitle.innerHTML = `${book} <a href="#top">[^]</a>`;
+
+    bookTitle.textContent = book + " ";
+
     bookDiv.appendChild(bookTitle);
 
     const chapters = document.createElement("div");
@@ -234,18 +248,19 @@ function buildSection(sectionName, books) {
     const count = chapterCounts[book];
 
     for (let ch = 1; ch <= count; ch++) {
-      const link = document.createElement("a");
+      const button = document.createElement("button");
 
       const chapterAnchor = `${bookKey}-chapter-${ch}`;
 
-      link.href = `book.html?book=${encodeURIComponent(book)}#${chapterAnchor}`;
+      button.textContent = ch;
+      button.className = "chapter-link";
 
-      link.textContent = ch;
-      link.className = "chapter-link";
+      button.addEventListener("click", () => {
+        window.location.href = `book.html?book=${encodeURIComponent(book)}#${chapterAnchor}`;
+      });
 
-      chapters.appendChild(link);
+      chapters.appendChild(button);
     }
-
     bookDiv.appendChild(chapters);
     section.appendChild(bookDiv);
   }

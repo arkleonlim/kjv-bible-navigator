@@ -43,18 +43,15 @@ textarea {
 
 .chapter-link {
   display: inline-block;
-
   margin: 4px;
-
   padding: 4px 8px;
-
   background: #eee;
-
   border-radius: 4px;
-
+  border: none;
   text-decoration: none;
-
-  font-weight: bold;
+  /* font-weight: bold; */
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .chapter-link:hover {
@@ -68,12 +65,53 @@ textarea {
   border-top: 2px solid #aaa;
 }
 
-.section-title {
-  text-align: center;
+.section-title,
+h2,
+h3 {
+  display: flex;
+  align-items: center;
 }
 
 .highlight-verse {
   background-color: #d6ecff;
   /* padding: 4px; */
   border-radius: 4px;
+}
+
+.top-button {
+  /* margin-left: 6px; */
+  /* padding: 2px 6px; */
+
+  border: none;
+  /* border-radius: 4px; */
+
+  margin-left: auto;
+
+  padding: 6px;
+
+  border: none;
+  background: none;
+
+  cursor: pointer;
+
+  font-family: inherit;
+}
+
+.top-button-book {
+  margin-left: auto;
+
+  padding: 6px;
+
+  border: none;
+  background: none;
+
+  cursor: pointer;
+
+  font-family: inherit;
+}
+
+#chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }

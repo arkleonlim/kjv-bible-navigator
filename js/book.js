@@ -19,25 +19,50 @@ async function loadBook(bookName) {
   data.chapters.forEach((chapter) => {
     const chapterId = `${bookKey}-chapter-${chapter.chapter}`;
 
-    // chapter navigation
-    const link = document.createElement("a");
-    link.href = `#${chapterId}`;
-    link.innerText = chapter.chapter;
-    nav.appendChild(link);
+    /* -----------------------------
+       CHAPTER NAVIGATION BUTTONS
+    ------------------------------*/
 
-    // chapter heading
+    const button = document.createElement("button");
+    button.textContent = chapter.chapter;
+    button.className = "chapter-link";
+
+    button.addEventListener("click", () => {
+      document.getElementById(chapterId)?.scrollIntoView({
+        behavior: "smooth",
+      });
+    });
+
+    nav.appendChild(button);
+
+    /* -----------------------------
+       CHAPTER HEADING
+    ------------------------------*/
+
     const chapterTitle = document.createElement("h2");
-
     chapterTitle.id = chapterId;
 
-    chapterTitle.innerHTML = `
-      ${data.book} ${chapter.chapter}
-      <a href="#top">[^]</a>
-    `;
+    chapterTitle.textContent = `${data.book} ${chapter.chapter} `;
+
+    const topBtn = document.createElement("button");
+    topBtn.textContent = "🔼";
+    topBtn.className = "top-button-book";
+
+    topBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+
+    chapterTitle.appendChild(topBtn);
 
     container.appendChild(chapterTitle);
 
-    // verses
+    /* -----------------------------
+       VERSES
+    ------------------------------*/
+
     chapter.verses.forEach((v) => {
       const verse = document.createElement("p");
 
@@ -52,15 +77,17 @@ async function loadBook(bookName) {
   });
 
   setupVerseClick(container);
-
   highlightFromHash();
 }
+
+/* -----------------------------
+   HIGHLIGHT FROM URL
+------------------------------*/
 
 function highlightFromHash() {
   if (!window.location.hash) return;
 
   const id = window.location.hash.substring(1);
-
   const target = document.getElementById(id);
 
   if (target) {
@@ -73,12 +100,13 @@ function highlightFromHash() {
   }
 }
 
+/* -----------------------------
+   CLICK VERSE TO HIGHLIGHT
+------------------------------*/
+
 function setupVerseClick(container) {
   container.addEventListener("click", (e) => {
-    // find verse link if clicked
     const link = e.target.closest(".verse");
-
-    // find verse paragraph
     const verseElement = e.target.closest("#bible p");
 
     let verseId = null;
@@ -93,23 +121,22 @@ function setupVerseClick(container) {
     if (!verseId) return;
 
     const verse = document.getElementById(verseId);
-
     if (!verse) return;
 
-    // remove previous highlight
     document
       .querySelectorAll(".highlight-verse")
       .forEach((el) => el.classList.remove("highlight-verse"));
 
-    // highlight selected verse
     verse.classList.add("highlight-verse");
 
-    // update URL without scrolling
     history.replaceState(null, "", `#${verseId}`);
   });
 }
 
-// URL handling
+/* -----------------------------
+   URL HANDLING
+------------------------------*/
+
 const params = new URLSearchParams(window.location.search);
 
 const book = decodeURIComponent(params.get("book") || "Genesis");
