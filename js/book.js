@@ -1,4 +1,18 @@
 /* -----------------------------
+   LOADER
+------------------------------*/
+
+const loader = document.getElementById("loader");
+
+function showLoader() {
+  if (loader) loader.style.display = "grid";
+}
+
+function hideLoader() {
+  if (loader) loader.remove();
+}
+
+/* -----------------------------
    THEME LOAD
 ------------------------------*/
 
@@ -40,20 +54,6 @@ themeToggle.addEventListener("click", toggleTheme);
 
 setTheme(savedTheme);
 
-/* -----------------------------
-   LOADER
-------------------------------*/
-
-const loader = document.getElementById("loader");
-
-function showLoader() {
-  loader.classList.remove("hidden");
-}
-
-function hideLoader() {
-  loader.classList.add("hidden");
-}
-
 function normalizeBook(book) {
   return book.toLowerCase().replace(/\s+/g, "");
 }
@@ -78,12 +78,16 @@ async function loadBook(bookName) {
 
   const bookKey = normalizeBook(bookName);
 
+  /* hide loader before heavy DOM work */
+  hideLoader();
+
+  /* allow browser to repaint */
+  await new Promise(requestAnimationFrame);
+
+  const fragment = document.createDocumentFragment();
+
   data.chapters.forEach((chapter) => {
     const chapterId = `${bookKey}-chapter-${chapter.chapter}`;
-
-    /* -----------------------------
-       CHAPTER NAVIGATION BUTTONS
-    ------------------------------*/
 
     const button = document.createElement("button");
     button.textContent = chapter.chapter;
@@ -97,10 +101,6 @@ async function loadBook(bookName) {
 
     nav.appendChild(button);
 
-    /* -----------------------------
-       CHAPTER HEADING
-    ------------------------------*/
-
     const chapterTitle = document.createElement("h2");
     chapterTitle.id = chapterId;
 
@@ -111,18 +111,12 @@ async function loadBook(bookName) {
     topBtn.className = "top-button-book";
 
     topBtn.addEventListener("click", () => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     chapterTitle.appendChild(topBtn);
-    container.appendChild(chapterTitle);
 
-    /* -----------------------------
-       VERSES
-    ------------------------------*/
+    fragment.appendChild(chapterTitle);
 
     chapter.verses.forEach((v) => {
       const verse = document.createElement("p");
@@ -137,42 +131,14 @@ async function loadBook(bookName) {
 
       verse.innerHTML = `<a href="#${id}" class="verse">${v.verse}</a> ${v.text}`;
 
-      container.appendChild(verse);
-
-      /* -----------------------------
-         LONG PRESS COPY FEATURE
-      ------------------------------*/
-
-      const startPress = () => {
-        suppressVerseClick = false;
-
-        longPressTimer = setTimeout(() => {
-          suppressVerseClick = true;
-          copyVerse(v.text, data.book, chapter.chapter, v.verse, verse);
-        }, 1000);
-      };
-
-      const cancelPress = () => {
-        clearTimeout(longPressTimer);
-      };
-
-      verse.addEventListener("mousedown", startPress);
-      verse.addEventListener("touchstart", startPress, { passive: true });
-
-      verse.addEventListener("mouseup", cancelPress);
-      verse.addEventListener("mouseleave", cancelPress);
-      verse.addEventListener("touchend", cancelPress);
-      verse.addEventListener("touchcancel", cancelPress);
+      fragment.appendChild(verse);
     });
   });
 
-  setupVerseClick(container);
-  highlightFromHash();
+  container.appendChild(fragment);
 
   setupVerseClick(container);
   highlightFromHash();
-
-  hideLoader();
 }
 
 /* -----------------------------

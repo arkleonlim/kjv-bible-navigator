@@ -233,24 +233,15 @@ ul a:hover {
 
 #loader {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  inset: 0;
+  display: grid;
+  place-items: center;
   background: var(--bg);
-
-  z-index: 2000;
+  z-index: 9999;
 }
 
-/* rotating hourglass */
-
 .spinner {
-  font-size: 40px;
+  font-size: 42px;
   animation: spin 1.2s linear infinite;
 }
 
@@ -258,14 +249,7 @@ ul a:hover {
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
-}
-
-/* hidden state */
-
-.hidden {
-  display: none !important;
 }
