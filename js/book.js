@@ -75,18 +75,26 @@ function highlightFromHash() {
 
 function setupVerseClick(container) {
   container.addEventListener("click", (e) => {
+    // find verse link if clicked
     const link = e.target.closest(".verse");
 
-    if (!link) return;
+    // find verse paragraph
+    const verseElement = e.target.closest("#bible p");
 
-    // stop browser from jumping
-    e.preventDefault();
+    let verseId = null;
 
-    const verseId = link.getAttribute("href").substring(1);
+    if (link) {
+      e.preventDefault();
+      verseId = link.getAttribute("href").substring(1);
+    } else if (verseElement) {
+      verseId = verseElement.id;
+    }
 
-    const verseElement = document.getElementById(verseId);
+    if (!verseId) return;
 
-    if (!verseElement) return;
+    const verse = document.getElementById(verseId);
+
+    if (!verse) return;
 
     // remove previous highlight
     document
@@ -94,9 +102,9 @@ function setupVerseClick(container) {
       .forEach((el) => el.classList.remove("highlight-verse"));
 
     // highlight selected verse
-    verseElement.classList.add("highlight-verse");
+    verse.classList.add("highlight-verse");
 
-    // update URL hash without scrolling
+    // update URL without scrolling
     history.replaceState(null, "", `#${verseId}`);
   });
 }
