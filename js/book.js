@@ -58,6 +58,88 @@ function normalizeBook(book) {
   return book.toLowerCase().replace(/\s+/g, "");
 }
 
+/* -----------------------------
+   HARD CODED CHAPTER COUNTS
+------------------------------*/
+
+const chapterCounts = {
+  Genesis: 50,
+  Exodus: 40,
+  Leviticus: 27,
+  Numbers: 36,
+  Deuteronomy: 34,
+
+  Joshua: 24,
+  Judges: 21,
+  Ruth: 4,
+  "1Samuel": 31,
+  "2Samuel": 24,
+  "1Kings": 22,
+  "2Kings": 25,
+  "1Chronicles": 29,
+  "2Chronicles": 36,
+  Ezra: 10,
+  Nehemiah: 13,
+  Esther: 10,
+
+  Job: 42,
+  Psalms: 150,
+  Proverbs: 31,
+  Ecclesiastes: 12,
+  SongofSolomon: 8,
+
+  Isaiah: 66,
+  Jeremiah: 52,
+  Lamentations: 5,
+  Ezekiel: 48,
+  Daniel: 12,
+
+  Hosea: 14,
+  Joel: 3,
+  Amos: 9,
+  Obadiah: 1,
+  Jonah: 4,
+  Micah: 7,
+  Nahum: 3,
+  Habakkuk: 3,
+  Zephaniah: 3,
+  Haggai: 2,
+  Zechariah: 14,
+  Malachi: 4,
+
+  Matthew: 28,
+  Mark: 16,
+  Luke: 24,
+  John: 21,
+
+  Acts: 28,
+
+  Romans: 16,
+  "1Corinthians": 16,
+  "2Corinthians": 13,
+  Galatians: 6,
+  Ephesians: 6,
+  Philippians: 4,
+  Colossians: 4,
+  "1Thessalonians": 5,
+  "2Thessalonians": 3,
+  "1Timothy": 6,
+  "2Timothy": 4,
+  Titus: 3,
+  Philemon: 1,
+
+  Hebrews: 13,
+  James: 5,
+  "1Peter": 5,
+  "2Peter": 3,
+  "1John": 5,
+  "2John": 1,
+  "3John": 1,
+  Jude: 1,
+
+  Revelation: 22,
+};
+
 let longPressTimer = null;
 let suppressVerseClick = false;
 let currentUtterance = null;
@@ -78,19 +160,24 @@ async function loadBook(bookName) {
 
   const bookKey = normalizeBook(bookName);
 
-  /* hide loader before heavy DOM work */
   hideLoader();
 
-  /* allow browser to repaint */
   await new Promise(requestAnimationFrame);
 
-  const fragment = document.createDocumentFragment();
+  const totalChapters = chapterCounts[bookName];
 
-  data.chapters.forEach((chapter) => {
-    const chapterId = `${bookKey}-chapter-${chapter.chapter}`;
+  const chapterMap = Object.fromEntries(
+    data.chapters.map((c) => [c.chapter, c]),
+  );
+
+  for (let chapterNum = 1; chapterNum <= totalChapters; chapterNum++) {
+    const chapter = chapterMap[chapterNum];
+    if (!chapter) continue;
+
+    const chapterId = `${bookKey}-chapter-${chapterNum}`;
 
     const button = document.createElement("button");
-    button.textContent = chapter.chapter;
+    button.textContent = chapterNum;
     button.className = "chapter-link";
 
     button.addEventListener("click", () => {
@@ -103,8 +190,7 @@ async function loadBook(bookName) {
 
     const chapterTitle = document.createElement("h2");
     chapterTitle.id = chapterId;
-
-    chapterTitle.textContent = `${data.book} ${chapter.chapter} `;
+    chapterTitle.textContent = `${data.book} ${chapterNum} `;
 
     const topBtn = document.createElement("button");
     topBtn.textContent = "🔼";
@@ -115,31 +201,111 @@ async function loadBook(bookName) {
     });
 
     chapterTitle.appendChild(topBtn);
+    container.appendChild(chapterTitle);
 
-    fragment.appendChild(chapterTitle);
-
-    chapter.verses.forEach((v) => {
+    for (const v of chapter.verses) {
       const verse = document.createElement("p");
 
-      const id = `${bookKey}-${chapter.chapter}-${v.verse}`;
+      const id = `${bookKey}-${chapterNum}-${v.verse}`;
       verse.id = id;
 
       verse.dataset.book = data.book;
-      verse.dataset.chapter = chapter.chapter;
+      verse.dataset.chapter = chapterNum;
       verse.dataset.verse = v.verse;
       verse.dataset.text = v.text;
 
       verse.innerHTML = `<a href="#${id}" class="verse">${v.verse}</a> ${v.text}`;
 
-      fragment.appendChild(verse);
-    });
-  });
+      container.appendChild(verse);
+    }
+  }
 
-  container.appendChild(fragment);
+  /* allow repaint once after DOM build */
+
+  await new Promise(requestAnimationFrame);
 
   setupVerseClick(container);
   highlightFromHash();
 }
+
+// async function loadBook(bookName) {
+//   showLoader();
+
+//   const res = await fetch(`data/${bookName}.json`);
+//   const data = await res.json();
+
+//   const container = document.getElementById("bible");
+//   const nav = document.getElementById("chapters");
+
+//   container.innerHTML = "";
+//   nav.innerHTML = "";
+
+//   document.getElementById("bookTitle").innerText = data.book;
+
+//   const bookKey = normalizeBook(bookName);
+
+//   /* hide loader before heavy DOM work */
+//   hideLoader();
+
+//   /* allow browser to repaint */
+//   await new Promise(requestAnimationFrame);
+
+//   const fragment = document.createDocumentFragment();
+
+//   data.chapters.forEach((chapter) => {
+//     const chapterId = `${bookKey}-chapter-${chapter.chapter}`;
+
+//     const button = document.createElement("button");
+//     button.textContent = chapter.chapter;
+//     button.className = "chapter-link";
+
+//     button.addEventListener("click", () => {
+//       document.getElementById(chapterId)?.scrollIntoView({
+//         behavior: "smooth",
+//       });
+//     });
+
+//     nav.appendChild(button);
+
+//     const chapterTitle = document.createElement("h2");
+//     chapterTitle.id = chapterId;
+
+//     chapterTitle.textContent = `${data.book} ${chapter.chapter} `;
+
+//     const topBtn = document.createElement("button");
+//     topBtn.textContent = "🔼";
+//     topBtn.className = "top-button-book";
+
+//     topBtn.addEventListener("click", () => {
+//       window.scrollTo({ top: 0, behavior: "smooth" });
+//     });
+
+//     chapterTitle.appendChild(topBtn);
+
+//     fragment.appendChild(chapterTitle);
+
+//     chapter.verses.forEach((v) => {
+//       const verse = document.createElement("p");
+
+//       const id = `${bookKey}-${chapter.chapter}-${v.verse}`;
+//       verse.id = id;
+
+//       verse.dataset.book = data.book;
+//       verse.dataset.chapter = chapter.chapter;
+//       verse.dataset.verse = v.verse;
+//       verse.dataset.text = v.text;
+
+//       verse.innerHTML = `<a href="#${id}" class="verse">${v.verse}</a> ${v.text}`;
+
+//       fragment.appendChild(verse);
+//     });
+//   });
+
+//   container.appendChild(fragment);
+
+//   setupVerseClick(container);
+//   highlightFromHash();
+// }
 
 /* -----------------------------
    SPEAK VERSE USING BROWSER TTS
