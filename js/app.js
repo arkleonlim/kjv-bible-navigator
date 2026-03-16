@@ -393,4 +393,18 @@ function init() {
   }
 }
 
+/* -----------------------------
+   FOOTER SCROLL TO TOP
+------------------------------*/
+
+const footerTopBtn = document.getElementById("footerTopBtn");
+
+if (footerTopBtn) {
+  footerTopBtn.addEventListener("click", () => {
+    document.getElementById("top").scrollIntoView({
+      behavior: "smooth",
+    });
+  });
+}
+
 init();
