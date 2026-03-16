@@ -116,7 +116,7 @@ async function loadBook(bookName) {
    SPEAK VERSE USING BROWSER TTS
 ------------------------------*/
 
-function speakVerse(text, book, chapter, verse) {
+function speakVerse(text) {
   if (!("speechSynthesis" in window)) {
     console.warn("This browser does not support speech synthesis.");
     return;
@@ -124,8 +124,7 @@ function speakVerse(text, book, chapter, verse) {
 
   window.speechSynthesis.cancel();
 
-  const speechText = `${book}, chapter ${chapter}, verse ${verse}. ${text}`;
-  currentUtterance = new SpeechSynthesisUtterance(speechText);
+  currentUtterance = new SpeechSynthesisUtterance(text);
 
   currentUtterance.lang = "en-US";
   currentUtterance.rate = 1;
@@ -232,11 +231,8 @@ function setupVerseClick(container) {
     history.replaceState(null, "", `#${verseId}`);
 
     const text = verse.dataset.text || "";
-    const book = verse.dataset.book || "";
-    const chapter = verse.dataset.chapter || "";
-    const verseNumber = verse.dataset.verse || "";
 
-    speakVerse(text, book, chapter, verseNumber);
+    speakVerse(text);
   });
 }
 
