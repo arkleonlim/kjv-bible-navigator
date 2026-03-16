@@ -12,19 +12,19 @@ The site loads each book dynamically and supports:
 Example verse link:
 
 ```
-https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-3-16
+https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-1-1
 ```
 
-This will load the Gospel of John and scroll directly to **John 3:16**.
+This will load the Gospel of John and scroll directly to **John 1:1**.
 
 Example Markdown link:
 
 ```
-[John 3:16](https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-3-16)
+[John 1:1](https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-1-1)
 ```
 
 Sample link:
-[John 3:16](https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-3-16)
+[John 1:1](https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-1-1)
 
 ---
 
