@@ -2,6 +2,8 @@ function normalizeBook(book) {
   return book.toLowerCase().replace(/\s+/g, "");
 }
 
+let longPressTimer = null;
+
 async function loadBook(bookName) {
   const res = await fetch(`data/${bookName}.json`);
   const data = await res.json();
@@ -56,7 +58,6 @@ async function loadBook(bookName) {
     });
 
     chapterTitle.appendChild(topBtn);
-
     container.appendChild(chapterTitle);
 
     /* -----------------------------
@@ -67,17 +68,78 @@ async function loadBook(bookName) {
       const verse = document.createElement("p");
 
       const id = `${bookKey}-${chapter.chapter}-${v.verse}`;
-
       verse.id = id;
 
       verse.innerHTML = `<a href="#${id}" class="verse">${v.verse}</a> ${v.text}`;
 
       container.appendChild(verse);
+
+      /* -----------------------------
+         LONG PRESS COPY FEATURE
+      ------------------------------*/
+
+      const startPress = (e) => {
+        longPressTimer = setTimeout(() => {
+          copyVerse(v.text, data.book, chapter.chapter, v.verse, verse);
+        }, 1000);
+      };
+
+      const cancelPress = () => {
+        clearTimeout(longPressTimer);
+      };
+
+      verse.addEventListener("mousedown", startPress);
+      verse.addEventListener("touchstart", startPress);
+
+      verse.addEventListener("mouseup", cancelPress);
+      verse.addEventListener("mouseleave", cancelPress);
+      verse.addEventListener("touchend", cancelPress);
+      verse.addEventListener("touchcancel", cancelPress);
     });
   });
 
   setupVerseClick(container);
   highlightFromHash();
+}
+
+/* -----------------------------
+   COPY VERSE TO CLIPBOARD
+------------------------------*/
+
+function copyVerse(text, book, chapter, verse, element) {
+  const copyText = `"${text}" - ${book} ${chapter}:${verse} KJV`;
+
+  navigator.clipboard.writeText(copyText);
+
+  showTooltip(element, "Copied!");
+}
+
+/* -----------------------------
+   TOOLTIP
+------------------------------*/
+
+function showTooltip(element, message) {
+  const tip = document.createElement("div");
+
+  tip.textContent = message;
+  tip.style.position = "absolute";
+  tip.style.background = "#333";
+  tip.style.color = "#fff";
+  tip.style.padding = "4px 8px";
+  tip.style.borderRadius = "4px";
+  tip.style.fontSize = "12px";
+  tip.style.zIndex = "1000";
+
+  const rect = element.getBoundingClientRect();
+
+  tip.style.left = rect.left + window.scrollX + "px";
+  tip.style.top = rect.top + window.scrollY - 28 + "px";
+
+  document.body.appendChild(tip);
+
+  setTimeout(() => {
+    tip.remove();
+  }, 1200);
 }
 
 /* -----------------------------
