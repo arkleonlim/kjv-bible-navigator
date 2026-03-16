@@ -1,3 +1,37 @@
+/* -----------------------------
+   THEME TOGGLE
+------------------------------*/
+
+const themeToggle = document.getElementById("themeToggle");
+
+function setTheme(theme) {
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  } else {
+    document.body.classList.remove("dark");
+    themeToggle.textContent = "🕶️";
+  }
+
+  localStorage.setItem("theme", theme);
+}
+
+function toggleTheme() {
+  const current = document.body.classList.contains("dark") ? "dark" : "light";
+
+  const next = current === "dark" ? "light" : "dark";
+
+  setTheme(next);
+}
+
+themeToggle.addEventListener("click", toggleTheme);
+
+/* load saved theme */
+
+const savedTheme = localStorage.getItem("theme") || "dark";
+
+setTheme(savedTheme);
+
 function normalizeBook(book) {
   return book.toLowerCase().replace(/\s+/g, "");
 }

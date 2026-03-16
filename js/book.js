@@ -1,3 +1,45 @@
+/* -----------------------------
+   THEME LOAD
+------------------------------*/
+
+const savedTheme = localStorage.getItem("theme") || "dark";
+
+if (savedTheme === "dark") {
+  document.body.classList.add("dark");
+}
+
+/* -----------------------------
+   THEME TOGGLE
+------------------------------*/
+
+const themeToggle = document.getElementById("themeToggle");
+
+function setTheme(theme) {
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  } else {
+    document.body.classList.remove("dark");
+    themeToggle.textContent = "🕶️";
+  }
+
+  localStorage.setItem("theme", theme);
+}
+
+function toggleTheme() {
+  const current = document.body.classList.contains("dark") ? "dark" : "light";
+
+  const next = current === "dark" ? "light" : "dark";
+
+  setTheme(next);
+}
+
+themeToggle.addEventListener("click", toggleTheme);
+
+/* load saved theme */
+
+setTheme(savedTheme);
+
 function normalizeBook(book) {
   return book.toLowerCase().replace(/\s+/g, "");
 }
@@ -245,3 +287,17 @@ const params = new URLSearchParams(window.location.search);
 const book = decodeURIComponent(params.get("book") || "Genesis");
 
 loadBook(book);
+/* -----------------------------
+   FOOTER SCROLL TO TOP
+------------------------------*/
+
+const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+if (scrollTopBtn) {
+  scrollTopBtn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+}
