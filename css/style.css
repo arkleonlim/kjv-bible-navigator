@@ -10,6 +10,13 @@ body {
   overflow-wrap: break-word;
 }
 
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
 #bible p {
   margin: 6px 0;
   cursor: pointer;
