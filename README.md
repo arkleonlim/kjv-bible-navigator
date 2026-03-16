@@ -23,6 +23,9 @@ Example Markdown link:
 [John 3:16](https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-3-16)
 ```
 
+Sample link:
+[John 3:16](https://arkleonlim.github.io/kjv-bible-navigator/book.html?book=John#john-3-16)
+
 ---
 
 # License
