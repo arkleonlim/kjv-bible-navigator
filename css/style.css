@@ -69,25 +69,6 @@ body.dark .muted {
 }
 
 /* --------------------------------
-   LINKS & BUTTONS
----------------------------------*/
-
-body.dark a,
-body.dark button {
-  color: var(--text);
-  background: transparent;
-  border: 1px solid var(--divider);
-  text-shadow: 0 0 6px #00FF41;
-  transition: all 0.2s ease;
-}
-
-body.dark a:hover,
-body.dark button:hover {
-  background: var(--chapter-hover);
-  box-shadow: 0 0 8px #00FF41;
-}
-
-/* --------------------------------
    CHAPTER / PANEL STYLE
 ---------------------------------*/
 
