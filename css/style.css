@@ -99,25 +99,7 @@ body.dark ::selection {
   color: var(--text);
 }
 
-/* --------------------------------
-   INPUTS
----------------------------------*/
 
-body.dark input,
-body.dark select,
-body.dark textarea {
-  background: #000000;
-  color: var(--text);
-  border: 1px solid var(--divider);
-  text-shadow: 0 0 4px #00FF41;
-}
-
-body.dark input:focus,
-body.dark select:focus,
-body.dark textarea:focus {
-  outline: none;
-  box-shadow: 0 0 6px #00FF41;
-}
 
 /* --------------------------------
    NAV HOME
