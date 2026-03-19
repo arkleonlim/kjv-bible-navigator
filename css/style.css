@@ -54,28 +54,6 @@ body.dark {
   text-shadow: 0 0 4px #00FF41;
 }
 
-/* --------------------------------
-   CHAPTER / PANEL STYLE
----------------------------------*/
-
-body.dark .chapter {
-  background: var(--chapter-bg);
-  border: 1px solid var(--divider);
-}
-
-body.dark .chapter:hover {
-  background: var(--chapter-hover);
-}
-
-/* --------------------------------
-   DIVIDERS
----------------------------------*/
-
-body.dark hr {
-  border: none;
-  border-top: 1px solid var(--divider);
-}
-
 
 
 /* --------------------------------
