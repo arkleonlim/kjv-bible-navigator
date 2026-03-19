@@ -51,7 +51,7 @@ body.dark {
   --highlight: #002200;
 
   /* Matrix glow effect */
-  /* text-shadow: 0 0 4px #00FF41; */
+  text-shadow: 0 0 4px #00FF41;
 }
 
 
