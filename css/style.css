@@ -21,7 +21,7 @@
    DARK SEPIA THEME
 ---------------------------------*/
 
-body.dark {
+/* body.dark {
   --bg: #1e1c19;
   --text: #c7b08f;
   --muted: #b5aea3;
@@ -32,6 +32,110 @@ body.dark {
   --divider: #4a443d;
 
   --highlight: #2c3844;
+} */
+
+/* --------------------------------
+   MATRIX THEME
+---------------------------------*/
+
+body.dark {
+  --bg: #000000;
+  --text: #00FF41;
+  --muted: #00cc33;
+
+  --chapter-bg: #001a00;
+  --chapter-hover: #003300;
+
+  --divider: #004d00;
+
+  --highlight: #002200;
+
+  /* Matrix glow effect */
+  text-shadow: 0 0 4px #00FF41;
+}
+
+/* --------------------------------
+   BASE ELEMENTS
+---------------------------------*/
+
+body.dark {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* Muted text */
+body.dark .muted {
+  color: var(--muted);
+}
+
+/* --------------------------------
+   LINKS & BUTTONS
+---------------------------------*/
+
+body.dark a,
+body.dark button {
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--divider);
+  text-shadow: 0 0 6px #00FF41;
+  transition: all 0.2s ease;
+}
+
+body.dark a:hover,
+body.dark button:hover {
+  background: var(--chapter-hover);
+  box-shadow: 0 0 8px #00FF41;
+}
+
+/* --------------------------------
+   CHAPTER / PANEL STYLE
+---------------------------------*/
+
+body.dark .chapter {
+  background: var(--chapter-bg);
+  border: 1px solid var(--divider);
+}
+
+body.dark .chapter:hover {
+  background: var(--chapter-hover);
+}
+
+/* --------------------------------
+   DIVIDERS
+---------------------------------*/
+
+body.dark hr {
+  border: none;
+  border-top: 1px solid var(--divider);
+}
+
+/* --------------------------------
+   HIGHLIGHT / SELECTION
+---------------------------------*/
+
+body.dark ::selection {
+  background: var(--highlight);
+  color: var(--text);
+}
+
+/* --------------------------------
+   INPUTS
+---------------------------------*/
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #000000;
+  color: var(--text);
+  border: 1px solid var(--divider);
+  text-shadow: 0 0 4px #00FF41;
+}
+
+body.dark input:focus,
+body.dark select:focus,
+body.dark textarea:focus {
+  outline: none;
+  box-shadow: 0 0 6px #00FF41;
 }
 
 /* --------------------------------
