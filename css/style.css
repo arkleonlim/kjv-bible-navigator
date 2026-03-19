@@ -55,20 +55,6 @@ body.dark {
 }
 
 /* --------------------------------
-   BASE ELEMENTS
----------------------------------*/
-
-body.dark {
-  background-color: var(--bg);
-  color: var(--text);
-}
-
-/* Muted text */
-body.dark .muted {
-  color: var(--muted);
-}
-
-/* --------------------------------
    CHAPTER / PANEL STYLE
 ---------------------------------*/
 
@@ -88,15 +74,6 @@ body.dark .chapter:hover {
 body.dark hr {
   border: none;
   border-top: 1px solid var(--divider);
-}
-
-/* --------------------------------
-   HIGHLIGHT / SELECTION
----------------------------------*/
-
-body.dark ::selection {
-  background: var(--highlight);
-  color: var(--text);
 }
 
 
